@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { Box, Button, Container, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import { userStore } from "../store/userStore.js";
 import { Link } from "react-router-dom";
+import {authAPI} from "../api/siteAPI.js";
+import {toast} from "react-toastify";
 
 const Main = () => {
-	const { user, logout } = userStore();
 
+
+	const { user, logout, checkAuth} = userStore();
 	const [email, setEmail] = useState('')
 	const [pass, setPass] = useState('')
+
+
 
 
 	// Состояния для диалогов
@@ -16,9 +21,37 @@ const Main = () => {
 
 	// Открытие / закрытие модалок
 	const handleOpenLogin = () => setOpenLogin(true);
-	const handleCloseLogin = () => setOpenLogin(false);
+
+	const handleCloseLogin = () => {
+		setOpenLogin(false);
+		setEmail('')
+		setPass('')
+
+	}
 	const handleOpenRegister = () => setOpenRegister(true);
-	const handleCloseRegister = () => setOpenRegister(false);
+
+	const handleCloseRegister = () => {
+		setOpenRegister(false);
+		setEmail('')
+		setPass('')
+	}
+
+	const authPath  = () => {
+
+		authAPI({email, pass}).then(data => {
+			if(data.success){
+				localStorage.setItem("token", data.token);
+				checkAuth()
+				handleCloseLogin()
+
+			}else{
+				toast.error(data.message)
+			}
+		}).catch(error => {
+			console.log('Сервер не доступен')
+		})
+	}
+
 
 	return (
 		<>
@@ -57,22 +90,32 @@ const Main = () => {
 			{/* Модалка Авторизации */}
 			<Dialog open={openLogin} onClose={handleCloseLogin}>
 				<DialogTitle>Авторизация</DialogTitle>
-				<DialogContent>
-					<TextField autoFocus margin="dense" label="Email" type="email" fullWidth />
-					<TextField margin="dense" label="Пароль" type="password" fullWidth />
+				<DialogContent >
+					<Box sx={styles.bf}>
+						<TextField
+							value={email} onChange={(e)=> setEmail(e.currentTarget.value)}
+							autoFocus  label="Email" type="email"  />
+						<TextField
+							value={pass} onChange={(e)=> setPass(e.currentTarget.value)}
+							label="Пароль" type="password"  />
+					</Box>
+
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseLogin}>Отмена</Button>
-					<Button sx={styles.button}  variant="contained" color="primary">Войти</Button>
+					<Button sx={styles.button} onClick={authPath} variant="contained" color="primary">Войти</Button>
 				</DialogActions>
 			</Dialog>
 
 			{/* Модалка Регистрации */}
-			<Dialog open={openRegister} onClose={handleCloseRegister}>
+			<Dialog  open={openRegister} onClose={handleCloseRegister}>
 				<DialogTitle>Регистрация</DialogTitle>
 				<DialogContent>
-					<TextField margin="dense" label="Email" type="email" fullWidth />
-					<TextField margin="dense" label="Пароль" type="password" fullWidth />
+					<TextField value={email} onChange={(e)=> setEmail(e.currentTarget.value)}
+						 label="Email" type="email" fullWidth />
+					<TextField
+						value={pass} onChange={(e)=> setPass(e.currentTarget.value)}
+						 label="Пароль" type="password" fullWidth />
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseRegister}>Отмена</Button>
@@ -85,6 +128,9 @@ const Main = () => {
 
 // Стили
 const styles = {
+	bf:{
+		display: 'flex', flexDirection: 'column', gap: 2, my:2
+	},
 	buttonBlock: {
 		mt: '10px',
 		display: "flex",

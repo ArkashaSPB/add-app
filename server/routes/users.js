@@ -7,9 +7,9 @@ const router = express.Router();
 // Авторизация (POST)
 router.post("/auth", async (req, res) => {
 	try {
-		const { email, password } = req.body;
-		const token = await authFunc(email, password);
-		res.status(200).json({ token });
+		const { email, pass } = req.body;
+		const token = await authFunc(email, pass);
+		res.status(200).json(token);
 	} catch (error) {
 		res.status(500).json({ message: 'Ошибка при обработке запроса', error: error.message });
 	}

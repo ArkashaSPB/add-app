@@ -1,21 +1,24 @@
 import { connectToDatabase } from '../func/db.js';
 import { v4 as uuidv4 } from 'uuid';
 
-export const authFunc = async (email, password) => {
+export const authFunc = async (email, pass) => {
 	const connection = await connectToDatabase();
 	try {
 		// Ищем пользователя по email
 		const [rows] = await connection.execute('SELECT * FROM users WHERE email = ? LIMIT 1', [email]);
 		if (rows.length === 0) {
-			throw new Error('Пользователь не найден');
+			return {success: false, message: 'Пользователь не найден'};
 		}
 		const user = rows[0];
 		// В продакшене пароль следует хранить в зашифрованном виде!
-		if (user.password !== password) {
-			throw new Error('Неверный пароль');
+		if (user.pass !== pass) {
+			return {success: false, message: 'Неверный пароль'};
 		}
 		// Возвращаем токен, сохранённый в БД
-		return user.token;
+		return {
+			success: true,
+			token: 	user.token
+		};
 	} catch (error) {
 		throw new Error('Ошибка при запросе к базе данных: ' + error.message);
 	} finally {
