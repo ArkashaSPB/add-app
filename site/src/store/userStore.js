@@ -29,10 +29,12 @@ export const userStore = create((set) => ({
 		}
 	},
 
-	logout: () => {
+	logout: (navigate) => { // Добавляем параметр navigate
 		localStorage.removeItem("token");
 		set({ user: null });
+		if (navigate) navigate("/"); // Перенаправление на главную страницу
 	},
+
 }));
 
 // Автоматическая проверка токена при запуске

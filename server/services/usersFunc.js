@@ -39,7 +39,10 @@ export const regFunc = async (email, pass) => {
 		const token = uuidv4();
 		// Вставляем нового пользователя в БД
 		await connection.execute('INSERT INTO users (email, pass, token) VALUES (?, ?, ?)', [email, pass, token]);
-		return token;
+		return {
+			success: true,
+			token: token
+		};
 	} catch (error) {
 		throw new Error('Ошибка при запросе к базе данных: ' + error.message);
 	} finally {

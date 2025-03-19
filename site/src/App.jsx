@@ -9,12 +9,14 @@ import AddApp from "./pages/user/addApp.jsx";
 import { userStore } from "./store/userStore.js";
 import {useEffect} from "react";
 import User from "./pages/user/User.jsx";
+import Layout from "./pages/user/Layout.jsx";
+import AppPage from "./pages/AppPage.jsx";
 
 const routes = [
   { path: "/", element: <Main /> },
-  { path: "/shop", element: <div>8</div> },
-  { path: "/add-app", element: <AddApp/> },
-  { path: "/user", element: <User/> },
+  { path: "/add-app", element: <Layout><AddApp/></Layout> },
+  { path: "/user", element: <Layout><User/></Layout>},
+  { path: "/app/:id", element: <Layout><AppPage/></Layout>},
 ];
 
 function App() {

@@ -20,7 +20,7 @@ router.post("/reg", async (req, res) => {
 	try {
 		const { email, pass } = req.body;
 		const token = await regFunc(email, pass);
-		res.status(200).json({ token });
+		res.status(200).json(token );
 	} catch (error) {
 		res.status(500).json({ message: 'Ошибка при обработке запроса', error: error.message });
 	}

@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { Box, Button, Container, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import { userStore } from "../store/userStore.js";
-import { Link } from "react-router-dom";
-import {authAPI} from "../api/siteAPI.js";
+import {Link, useNavigate} from "react-router-dom";
+import {authAPI, regAPI} from "../api/siteAPI.js";
 import {toast} from "react-toastify";
 
 const Main = () => {
+	const navigate = useNavigate();
 
 
 	const { user, logout, checkAuth} = userStore();
 	const [email, setEmail] = useState('')
 	const [pass, setPass] = useState('')
-
-
-
 
 	// Состояния для диалогов
 	const [openLogin, setOpenLogin] = useState(false);
@@ -52,6 +50,18 @@ const Main = () => {
 		})
 	}
 
+	const regFunc = () => {
+		regAPI({email, pass}).then(data => {
+			if(data.success){
+				localStorage.setItem("token", data.token);
+				checkAuth()
+				handleCloseRegister()
+			}else{
+				toast.error(data.message)
+			}
+		})
+	}
+
 
 	return (
 		<>
@@ -68,7 +78,7 @@ const Main = () => {
 									<Button component={Link} to="/user" sx={styles.button} variant="contained">
 										Кабинет
 									</Button>
-									<Button onClick={logout} sx={styles.button} color="error" variant="contained">
+									<Button onClick={()=>logout(navigate)} sx={styles.button} color="error" variant="contained">
 										Выйти
 									</Button>
 								</>
@@ -111,15 +121,17 @@ const Main = () => {
 			<Dialog  open={openRegister} onClose={handleCloseRegister}>
 				<DialogTitle>Регистрация</DialogTitle>
 				<DialogContent>
+					<Box sx={styles.bf}>
 					<TextField value={email} onChange={(e)=> setEmail(e.currentTarget.value)}
 						 label="Email" type="email" fullWidth />
 					<TextField
 						value={pass} onChange={(e)=> setPass(e.currentTarget.value)}
 						 label="Пароль" type="password" fullWidth />
+					</Box>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseRegister}>Отмена</Button>
-					<Button sx={styles.button}  variant="contained" color="primary">Зарегистрироваться</Button>
+					<Button onClick={regFunc} sx={styles.button}  variant="contained" color="primary">Зарегистрироваться</Button>
 				</DialogActions>
 			</Dialog>
 		</>

@@ -1,7 +1,7 @@
-// upload.js
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import crypto from 'crypto'; // Для генерации случайного хэша
 
 // Настройка хранилища для multer
 const storage = multer.diskStorage({
@@ -9,13 +9,14 @@ const storage = multer.diskStorage({
 		const dir = './photo';
 		// Создаём папку, если она не существует
 		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir);
+			fs.mkdirSync(dir, { recursive: true }); // recursive поддерживает создание подпапок (при необходимости)
 		}
 		cb(null, dir);
 	},
 	filename: (req, file, cb) => {
-		const ext = path.extname(file.originalname);
-		cb(null, Date.now() + ext); // Генерируем уникальное имя файла
+		const ext = path.extname(file.originalname); // Расширение файла (например, .png)
+		const hash = crypto.randomBytes(8).toString('hex'); // Генерация случайного хэша (8 байт достаточно)
+		cb(null, `${Date.now()}-${hash}${ext}`); // Генерация уникального имени
 	},
 });
 

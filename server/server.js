@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import upload from './upload.js'; // Импортируем multer
 import cors from 'cors';
-import { usersRouter} from "./routes/index.js"; // Импортируем бота
+import {appRouter, usersRouter} from "./routes/index.js"; // Импортируем бота
 
 
 dotenv.config();
@@ -16,6 +16,7 @@ app.use(cors());
 
 // Роуты
 app.use('/api/u', usersRouter);
+app.use('/api/app', appRouter);
 
 
 // Один файл
