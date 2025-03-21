@@ -14,7 +14,7 @@ const SwiperImg = ({images}) => {
 			navigation // Включаем кнопки навигации (стрелки)
 			pagination={{ clickable: true }} // Включаем пагинацию (точки)
 		>
-			{images.map((src, index) => (
+			{images && images.map((src, index) => (
 				<SwiperSlide key={index}>
 					<img src={url+src} alt={`Slide ${index + 1}`} style={{ width: '100%', borderRadius: '10px' }} />
 				</SwiperSlide>
