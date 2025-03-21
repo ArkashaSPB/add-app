@@ -50,8 +50,8 @@ const MultipleImagesUploader = ({ images, setImages }) => {
 				<Box
 					onClick={handleClick}
 					sx={{
-						width: "235px",
-						height: "387px",
+						width:{xs: '86px', md: '235px'} ,
+						height:{xs: '173px', md: '387px'},
 						borderRadius: "10px",
 						position: "relative",
 						cursor: "pointer",
@@ -109,7 +109,8 @@ const MultipleImagesUploader = ({ images, setImages }) => {
 											>
 												<Box component="img"
 														 sx={{
-															height: '387px',
+															 height:{xs: '173px', md: '387px'},
+
 															 borderRadius: '10px',
 														 }}
 													src={`${url}${img}`}

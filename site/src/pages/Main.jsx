@@ -113,7 +113,7 @@ const Main = () => {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseLogin}>Отмена</Button>
-					<Button sx={styles.button} onClick={authPath} variant="contained" color="primary">Войти</Button>
+					<Button  onClick={authPath} sx={{color: 'white'}} variant="contained" color="primary">Войти</Button>
 				</DialogActions>
 			</Dialog>
 
@@ -131,7 +131,7 @@ const Main = () => {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseRegister}>Отмена</Button>
-					<Button onClick={regFunc} sx={styles.button}  variant="contained" color="primary">Зарегистрироваться</Button>
+					<Button onClick={regFunc} sx={{color: 'white'}}   variant="contained" color="primary">Зарегистрироваться</Button>
 				</DialogActions>
 			</Dialog>
 		</>
@@ -141,6 +141,7 @@ const Main = () => {
 // Стили
 const styles = {
 	bf:{
+		minWidth: '300px',
 		display: 'flex', flexDirection: 'column', gap: 2, my:2
 	},
 	buttonBlock: {
@@ -150,21 +151,21 @@ const styles = {
 		justifyContent: "flex-end",
 	},
 	button: {
-		width: "269px",
-		height: "48px",
+		width: {xs: '74px', md:"269px" },
+		height: {xs: '16px', md:"48px" },
 		color: "white",
 		borderRadius: "15px",
 		fontWeight: 600,
-		fontSize: "16px",
+		fontSize: {xs: '6px', md:"16px" },
 		textTransform: "none",
 	},
 	t1: {
-		fontSize: "32px",
+		fontSize:  {xs: '12px', md:"32px" } ,
 		textTransform: "uppercase",
 		fontWeight: '800',
 	},
 	t2: {
-		fontSize: "32px",
+		fontSize:  {xs: '12px', md:"32px" } ,
 		textTransform: "uppercase",
 		fontWeight: '600',
 		fontStyle: "italic",
@@ -174,7 +175,8 @@ const styles = {
 		height: "100%",
 		backgroundImage: 'url("/fon.png")',
 		backgroundRepeat: "no-repeat",
-		backgroundPosition: "left center",
+		backgroundPosition: { xs: "left 5% center", md: "left center" },
+		backgroundSize: {xs: '30% auto', md:"auto auto"},
 		textAlign: "right",
 		color: "#fff",
 		display: 'flex',

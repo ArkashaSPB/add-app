@@ -33,7 +33,7 @@ const OtzivBlock = ({ otziv }) => {
 
 					{/* Кнопки "Да/Нет" */}
 					<Box sx={styles.buttons}>
-						<Typography>Вам помогла эта информация?</Typography>
+						<Typography sx={{fontSize: '10px'}}>Вам помогла эта информация?</Typography>
 						<Button variant="outlined" sx={styles.button}>Да</Button>
 						<Button variant="outlined" sx={styles.button}>Нет</Button>
 					</Box>
@@ -70,6 +70,7 @@ const styles = {
 	},
 	name: {
 		fontWeight: "bold",
+		fontSize: "10px",
 	},
 	dateRow: {
 		display: "flex",
@@ -81,15 +82,15 @@ const styles = {
 	},
 	date: {
 		color: "gray",
-		fontSize: "14px",
+		fontSize: "10px",
 	},
 	text: {
 		marginTop: "8px",
-		fontSize: "14px",
+		fontSize: "10px",
 	},
 	usefulText: {
 		color: "gray",
-		fontSize: "14px",
+		fontSize: "10px",
 		marginTop: "8px",
 	},
 	buttons: {
@@ -97,6 +98,7 @@ const styles = {
 		alignItems: "center",
 		gap: "10px",
 		marginTop: "8px",
+
 	},
 	button: {
 		textTransform: "none",

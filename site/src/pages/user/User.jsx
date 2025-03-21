@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Box, Button, Container, Typography} from "@mui/material";
 import {NavLink} from "react-router-dom";
 import {getAppByUserAPI} from "../../api/siteAPI.js";
+import EditIcon from "@mui/icons-material/Edit";
 
 const User = () => {
 
@@ -41,16 +42,28 @@ const User = () => {
 					}}
 				>
 					<Box sx={{
-						fontSize: '24px',
+						fontSize: {xs: '12px', md:"20px" },
 						fontWeight: 'bold',
 					}}>{app.name}</Box>
-					<Box>
-						<Button variant="contained" sx={{
-							height: "48px",
+					<Box
+						sx={{display: 'flex', gap: 1, alignItems: 'center'}}
+					>
+
+						<Button color="warning" variant="contained" sx={{
+							height: {xs: 'auto', md:"48px" },
 							color: "white",
 							borderRadius: "15px",
 							fontWeight: 700,
-							fontSize: "16px",
+							fontSize:  {xs: '12px', md:"16px" },
+							textTransform: "none",
+						}} component={NavLink} to={`/edit-app/${app.id}`}><EditIcon /></Button>
+
+						<Button variant="contained" sx={{
+							height: {xs: 'auto', md:"48px" },
+							color: "white",
+							borderRadius: "15px",
+							fontWeight: 700,
+							fontSize:  {xs: '12px', md:"16px" },
 							textTransform: "none",
 						}} component={NavLink} to={`/app/${app.id}`}>Предпросмотр</Button>
 					</Box>

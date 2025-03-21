@@ -2,10 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {Box, Button, Typography} from "@mui/material";
 import {getAppByIdAPI} from "../api/siteAPI.js";
-
-import ShareIcon from '@mui/icons-material/Share';
-
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import PhonelinkIcon from '@mui/icons-material/Phonelink';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -14,7 +10,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SwiperImg from "./block/SwiperImg.jsx";
 import {formatDate} from "../component/func.js";
 import RatingBlock from "./block/RatingBlock.jsx";
-import OtzivBlock from "./block/otzivBlock.jsx"; // Основной стиль
+import OtzivBlock from "./block/otzivBlock.jsx";
+import BottomNav from "./block/BottomNav.jsx"; // Основной стиль
 
 const ot = '20px'
 const colorGreen = '#008660'
@@ -26,8 +23,22 @@ const url =  import.meta.env.VITE_IMG;
 const AppPage = () => {
 
 	const [app, setApp] = useState(null)
-
 	const { id } = useParams();
+
+	console.log(app)
+
+
+	const [scrolled, setScrolled] = useState(false);
+
+	useEffect(() => {
+		const handleScroll = () => {
+			setScrolled(window.scrollY > 0);
+		};
+
+		window.addEventListener('scroll', handleScroll);
+
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
 
 	const getFunc = () => {
 		getAppByIdAPI(id).then(data => {
@@ -40,9 +51,14 @@ const AppPage = () => {
 
 
 	const htmlFunc = (m) => {
-		return m.length > 270
-			? m.slice(0, 270) + '...'
-			: m
+		if(!m ){
+			return('Нет описания')
+		}else{
+			return m.length > 270
+				? m.slice(0, 270) + '...'
+				: m
+		}
+
 	}
 
 	if(!app) return <p>Loading...</p>
@@ -50,12 +66,22 @@ const AppPage = () => {
 	return (
 		<Box sx={styles.b1}>
 
-			<Box sx={{display: 'sticky'}}>
-				<Box sx={styles.b1One}>
-					<Box >
-						<Box   component="img" src="/logo.svg"/>
-					</Box>
+			<Box sx={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+				<Box sx={{
+					...styles.b1One,
+					...(scrolled ? styles.shadow : {})
+				}}>
+					<Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+						<Box sx={{flexGrow: 1, }}>
+							<Box  component="img" src="/logo.svg" />
+						</Box>
+						<Box sx={{display: "flex", flexGrow: 0, gap: 2}}>
+							<Box component="img" src="/search.svg"  />
+							<Box component="img" src="/vopros.svg"  />
+							<Box sx={{background: '#D9D9D9', width: 20, height: 20, borderRadius: '100%' }}></Box>
+						</Box>
 
+					</Box>
 				</Box>
 			</Box>
 
@@ -65,22 +91,29 @@ const AppPage = () => {
 					<Box component="img" src={`${url}${app.img}`}/>
 				</Box>
 				<Box sx={styles.productDiv}>
-					<Typography    sx={{}}>{app.name}</Typography>
-					<Typography    sx={{}}>entertainment</Typography>
+					<Typography    sx={{fontSize: '15px', color: '#1E2020', fontWeight: 600}}>{app.name}</Typography>
+
+					<Typography    sx={{fontSize: '13px', color: colorGreen, fontWeight: 600}}>FIFA</Typography>
+					<Typography    sx={{fontSize: '8px'}}>Есть реклама</Typography>
+
 				</Box>
 			</Box>
 
-			<Box sx={styles.three}>
-				<Box>
-					<Box>{app.rating}</Box>
+			<Box sx={{...styles.three, textAlign: 'center'}}>
+				<Box flexGrow={1}>
+					<Box>{app.rating} <Box component="img" src="/star.svg" sx={{mr: 1}}/></Box>
 					<Box>{app.review_count}</Box>
 				</Box>
-				<Box>
+				<Box sx={styles.line}/>
+				<Box  flexGrow={1}>
 					<Box>{app.downloads}</Box>
 					<Box fontSize={8}>(Количество скачиваний)</Box>
 				</Box>
-				<Box >
-					<Box>{app.age_limit}</Box>
+				<Box sx={styles.line}/>
+				<Box  flexGrow={1}>
+					<Box sx={{ width: '13px', height: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '7px',
+						mx: 'auto', color: colorGreen, borderRadius: '100%', border: `1px solid  ${colorGreen}` }}>{app.age_limit}</Box>
+					<Box sx={{fontSize: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{app.age_limit}+ <InfoOutlinedIcon sx={{color: colorGray, fontSize: 10}} /></Box>
 				</Box>
 			</Box>
 
@@ -92,12 +125,12 @@ const AppPage = () => {
 			<Box sx={styles.share }>
 				<Box>
 					<Button sx={styles.shareButton} aria-label="Поделиться">
-						<ShareIcon /> Поделиться
+						<Box component="img" src="/p1.svg" sx={{mr: 1}}  /> Поделиться
 					</Button>
 				</Box>
 				<Box>
 					<Button  sx={styles.shareButton}  aria-label="Добавить в список желаний">
-						<BookmarkAddIcon /> Добавить в список желаний
+						<Box component="img" src="/p2.svg" sx={{mr: 1}}  /> Добавить в список желаний
 					</Button>
 
 				</Box>
@@ -203,7 +236,7 @@ const AppPage = () => {
 					</Box>
 				</Box>
 
-				<Button>Подробнее</Button>
+				<Typography component="a" href="#">Подробнее</Typography>
 
 
 
@@ -241,6 +274,61 @@ const AppPage = () => {
 				<OtzivBlock otziv={app.reviews}/>
 			</Box>
 
+			<Box sx={{px: ot, pt: '20px'}}>
+				<Typography component="h3" sx={styles.h3}>Новое в приложении</Typography>
+				<Box fontSize={fontText} dangerouslySetInnerHTML={{ __html: htmlFunc(app.description2 )}} />
+			</Box>
+
+
+			<Box sx={{px: ot, pt: '20px'}}>
+				<Box sx={styles.flex2}>
+					<Typography component="h3" sx={styles.h3}>{app.name}: другие приложения</Typography>
+					<Box>
+						<ArrowForwardIcon sx={{color: colorGray, fontSize: 14}} />
+					</Box>
+				</Box>
+				<Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
+					{app.similar_apps.map((item, i) =>
+						<Box display="flex" gap="10px" key={i}>
+							<Box>
+								<Box sx={{width: '55px', height: '55px', borderRadius: '10px'}} component="img" src={url+item.img} ></Box>
+							</Box>
+							<Box>
+								<Typography sx={{fontSize: '12px'}}>{item.name}</Typography>
+								<Typography sx={{fontSize: '10px'}}>{item.author}</Typography>
+								<Typography sx={{fontSize: '10px'}}>4,7 <Box component="img" src="/star.svg"  /></Typography>
+							</Box>
+						</Box>
+					)}
+
+				</Box>
+			</Box>
+
+		<Box sx={{px: ot, pt: '20px'}}>
+			<Box sx={styles.flex2}>
+				<Typography component="h3" sx={styles.h3}>Похожие приложения</Typography>
+				<Box>
+					<ArrowForwardIcon sx={{color: colorGray, fontSize: 14}} />
+				</Box>
+			</Box>
+			<Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
+				{app.similar_apps.map((item, i) =>
+					<Box display="flex" gap="10px" key={i}>
+						<Box>
+							<Box sx={{width: '55px', height: '55px', borderRadius: '10px'}} component="img" src={url+item.img} ></Box>
+						</Box>
+						<Box>
+							<Typography sx={{fontSize: '12px'}}>{item.name}</Typography>
+							<Typography sx={{fontSize: '10px'}}>{item.author}</Typography>
+							<Typography sx={{fontSize: '10px'}}>4,7 <Box component="img" src="/star.svg"  /></Typography>
+						</Box>
+					</Box>
+				)}
+
+			</Box>
+		</Box>
+
+			<BottomNav/>
 			<Box sx={{height: 100}}></Box>
 		</Box>
 	);
@@ -275,9 +363,13 @@ const styles = {
 			fontFamily: "'Inter', sans-serif !important",
 		},
 	},
+	shadow: {
+		boxShadow: '0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.2)'
+	},
+
 	b1One: {display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: ot,
-		pt: '13px',
-		boxShadow: '0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.2)' },
+		pt: '13px', backgroundColor: '#fff',
+	},
 		mainImg:{width: '55px', height: '55px',borderRadius: '10px',overflow: 'hidden',
 			'& img': {
 				width: '100%',
@@ -305,17 +397,8 @@ const styles = {
 		gap: '8px',
 		py: '16px',
 		px: ot,
+		fontSize: '10px',
 		'& div': {flexGrow: 1},
-		'& div > *:not(:first-of-type)::before': {
-			backgroundColor: 'rgb(232, 234, 237)',
-			content: '""',
-			display: 'block',
-			height: '24px',
-			width: '1px',
-			position: 'absolute',
-			left: 0,
-			top: 'calc(50% - 12px)'
-		}
 	},
 	button: {
 		fontSize: '12px',
@@ -389,7 +472,12 @@ const styles = {
 			},
 
 			'& p': {fontSize: fontText,},
-			'& button': {textTransform: 'none', color: colorGreen, fontSize: '10px',}
+			'& a': {textTransform: 'none', textDecoration: 'none', color: colorGreen, fontSize: '10px', fontWeight: 'bold'},
+		},
+		line: {
+			display: 'flex', justifyContent: 'center', alignItems: 'center',
+			flexGrow: 0,
+			'&:before': { content: '""' , height: '18px' , width: '1px', backgroundColor: '#CECFCF' },
 		}
 
 

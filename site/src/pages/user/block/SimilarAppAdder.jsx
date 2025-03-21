@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography } from "@mui/material";
+import {Box, TextField, Button, Typography, useMediaQuery, useTheme} from "@mui/material";
 import SingleImageUploader from "./SingleImageUploader";
 import { styles } from "./../css/addCss.js";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -12,6 +12,10 @@ const SimilarAppAdder = ({ similarApps, setSimilarApps }) => {
 		name: "",
 		author: "",
 	});
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("md")); // md = 900px
+
+	console.log(isMobile)
 
 	const handleAddSimilarApp = () => {
 		if (similarApp.name && similarApp.author) {
@@ -41,9 +45,9 @@ const SimilarAppAdder = ({ similarApps, setSimilarApps }) => {
 			<Typography component="h2" sx={styles.h2}>
 				Похожие приложения
 			</Typography>
-			<Box sx={{ display: "flex", gap: 2 }}>
+			<Box sx={{display: 'flex', flexDirection:  {xs: 'column', md : 'row'}, gap: 2,  }}>
 				{/* Поля для добавления нового приложения */}
-				<Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+				<Box sx={{ display: "flex", alignItems: "center", gap: 2,  }}>
 					<Box>
 						<SingleImageUploader
 							image={similarApp.img}
@@ -80,7 +84,7 @@ const SimilarAppAdder = ({ similarApps, setSimilarApps }) => {
 
 				{/* Список уже добавленных приложений с Drag and Drop */}
 				<DragDropContext onDragEnd={handleDragEnd}>
-					<Droppable droppableId="similarApps-droppable" direction="horizontal">
+					<Droppable droppableId="similarApps-droppable"  direction={isMobile ? "vertical" : "horizontal"}>
 						{(provided) => (
 							<Box
 								sx={{
@@ -89,6 +93,9 @@ const SimilarAppAdder = ({ similarApps, setSimilarApps }) => {
 									gap: 4,
 									overflowX: "auto",
 									maxWidth: "100%",
+									flexDirection:  {xs: 'column', md : 'row'},
+									mt:{xs: '20px', md : 'none'},
+
 								}}
 								ref={provided.innerRef}
 								{...provided.droppableProps}
@@ -114,13 +121,13 @@ const SimilarAppAdder = ({ similarApps, setSimilarApps }) => {
 													component="img"
 													src={`${url}${app.img}`}
 													alt={app.name}
-													sx={{ width: "150px", height: "150px", borderRadius: "10px" }}
+													sx={{ width: {xs: '55px', md: '150px'}, height: {xs: '55px', md: '150px'}, borderRadius: "10px" }}
 												/>
 												<Box
 													sx={{
 														flexGrow: 1,
 														display: "flex",
-														flexDirection: "column",
+														flexDirection:  {xs: 'column', md : 'row'},
 														justifyContent: "space-between",
 														gap: 1,
 														height: "100%",

@@ -35,8 +35,8 @@ const SingleImageUploader = ({ onUpload, image }) => {
 			<Box
 				onClick={handleClick}
 				sx={{
-					width: "150px",
-					height: "150px",
+					width: {xs: '55px', md: '159px'} ,
+					height: {xs: '55px', md: '159px'} ,
 					borderRadius: "10px",
 					position: "relative",
 					cursor: "pointer",

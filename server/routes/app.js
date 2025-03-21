@@ -50,8 +50,8 @@ router.put('/:id', checkAuthMiddleware, async (req, res) => {
 	try {
 		const user = req.user.id;
 		const id  = req.params.id;
-		await updateApp(id, user,  req.body);
-		res.json({ message: 'Приложение обновлено' });
+		const m = await updateApp(id, user,  req.body);
+		res.json(m);
 	} catch (error) {
 		res.status(500).json({ message: 'Ошибка сервера', error });
 	}

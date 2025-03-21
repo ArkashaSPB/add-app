@@ -1,5 +1,5 @@
 import { connectToDatabase } from '../func/db.js';
-
+import moment from 'moment';
 export const getAppById = async (id, user) => {
 	const connection = await connectToDatabase();
 	try {
@@ -38,14 +38,19 @@ export const getAppAll = async () => {
 
 
 export const updateApp = async (id, user, massive) => {
+
 	const connection = await connectToDatabase();
 	try {
-		const { name,img,  description, rating, review_count, downloads, age_limit, last_update, images, reviews, similar_apps } = massive;
+		const { name,img, description, description2, rating, review_count, downloads, age_limit, last_update, images, reviews, similar_apps } = massive;
+
+		const lastUpdateFormatted = moment(massive.last_update).format("YYYY-MM-DD HH:mm:ss");
+
+
 		const [result] = await connection.execute(
 			`UPDATE app 
-       SET name = ?,img = ?, description = ?, rating = ?, review_count = ?, downloads = ?, age_limit = ?, last_update = ?, images = ?, reviews = ?, similar_apps = ? 
+       SET name = ?,img = ?, description = ?,description2 = ?, rating = ?, review_count = ?, downloads = ?, age_limit = ?, last_update = ?, images = ?, reviews = ?, similar_apps = ? 
        WHERE id = ? AND user_id = ?`,
-			[name,img, description, rating, review_count, downloads, age_limit, last_update, images, reviews, similar_apps, id, user]
+			[name,img, description,description2, rating, review_count, downloads, age_limit, lastUpdateFormatted, images, reviews, similar_apps, id, user]
 		);
 
 		if (result.affectedRows > 0) {
@@ -54,6 +59,7 @@ export const updateApp = async (id, user, massive) => {
 			return { success: false, message: 'Запись не обновлена. Проверьте правильность id и user_id' };
 		}
 	} catch (error) {
+		console.log(error)
 		throw new Error('Ошибка при запросе к базе данных: ' + error.message);
 	} finally {
 		await connection.end();

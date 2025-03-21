@@ -11,12 +11,16 @@ import {useEffect} from "react";
 import User from "./pages/user/User.jsx";
 import Layout from "./pages/user/Layout.jsx";
 import AppPage from "./pages/AppPage.jsx";
+import EditPage from "./pages/user/EditPage.jsx";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const routes = [
   { path: "/", element: <Main /> },
   { path: "/add-app", element: <Layout><AddApp/></Layout> },
   { path: "/user", element: <Layout><User/></Layout>},
   { path: "/app/:id", element: <Layout><AppPage/></Layout>},
+  { path: "/edit-app/:id", element: <Layout><EditPage/></Layout>},
 ];
 
 function App() {
@@ -45,6 +49,17 @@ function App() {
           <ToastContainer />
         </BrowserRouter>
       </ThemeProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" // можно еще "dark" или "light"
+      />
 
     </>
   );

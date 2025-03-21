@@ -32,6 +32,8 @@ export const styles = {
 		pt: '10px',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+		gap: '20px',
+		flexDirection: {xs: 'row', md: 'row'},
 	},
 
 	b2Item: {
@@ -45,6 +47,7 @@ export const styles = {
 		gap: '10px',
 	},
 	line:{
+		// display: {xs: 'none',  md: 'block'},
 		height: '36px',
 		borderRight: '1px solid #CECFCF'
 	},
@@ -88,13 +91,13 @@ export const styles = {
 	form2: {
 		"& .MuiInputBase-root": {
 			fontFamily: "'Inter', sans-serif !important",
-			fontSize: "20px !important",
+			fontSize: {sx: '12px', md: '20px'} ,
 			fontWeight: 600, // Semibold
 		},
 		"& .MuiInputBase-input": {
 			color: "#8E8F8F", // Обычный текст 100%
 			fontFamily: "'Inter', sans-serif !important",
-			fontSize: "20px !important",
+			fontSize: {sx: '12px', md: '20px'},
 			fontWeight: 600,
 		},
 		"& .MuiInputBase-input::placeholder": {
@@ -119,12 +122,20 @@ export const styles = {
 		gap: '50px',
 	},
 	main: {
-		minHeight: '100vh',
-		pb: '100px',
+		minHeight: "100vh",
+		pb: "100px",
 		fontFamily: "'Inter', sans-serif",
-		background: '#fff',
-		color: '#000',
+		background: "#fff",
+		color: "#000",
+		fontSize: { xs: "12px", md: "auto" }, // Исправлено sx -> xs
+		"& p": { fontSize: { xs: "12px", md: "auto" } },
 
+		// ✅ Устанавливаем размер шрифта для input только на xs
+
+		// ✅ Устанавливаем размер шрифта для заголовков только на xs
+		"& h1, & h2, & h3, & h4, & h5, & h6": {
+			fontSize: { xs: "15px", md: "inherit" }, // 15px на xs, без изменений на md
+		},
 	},
 	stars: {
 		color: "#02885F", // Устанавливаем цвет звезд
