@@ -1,6 +1,6 @@
 import express from 'express';
 import {checkAuthMiddleware} from "../func/midl.js";
-import {addApp, deleteApp, getAppAll, getAppById, getAppByUser, updateApp} from "../services/appFunc.js";
+import {addApp, deleteApp, getAppAll, getAppById, getAppByObId, getAppByUser, updateApp} from "../services/appFunc.js";
 
 const router = express.Router();
 
@@ -12,6 +12,8 @@ router.get('/', async (req, res) => {
 		res.status(500).json({ message: 'Ошибка сервера', error });
 	}
 });
+
+
 
 router.get('/user', checkAuthMiddleware, async (req, res) => {
 	try {
@@ -29,6 +31,17 @@ router.get('/:id', checkAuthMiddleware, async (req, res) => {
 		const user = req.user.id;
 		const id  = req.params.id;
 		const app = await getAppById(id, user);
+		res.status(200).json(app);
+	} catch (error) {
+		res.status(500).json({ message: 'Ошибка сервера', error });
+	}
+});
+router.get('/public/:id', async (req, res) => {
+	try {
+
+		const id  = req.params.id;
+		console.log(id)
+		const app = await getAppByObId(id);
 		res.status(200).json(app);
 	} catch (error) {
 		res.status(500).json({ message: 'Ошибка сервера', error });

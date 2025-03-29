@@ -15,8 +15,6 @@ export const checkAPI = async () => {
 	return data
 }
 
-
-
 export const uploadImgAPI = async (file) => {
 	const formData = new FormData();
 	formData.append('image', file); // 'image' — это имя поля, которое ожидается на сервере
@@ -59,6 +57,11 @@ export const getAppByUserAPI = async () => {
 
 export const getAppByIdAPI = async (id) => {
 	const {data} = await $authHost.get(`app/`+id)
+	return data
+}
+
+export const getAppPublickIdAPI = async (id) => {
+	const {data} = await $host.get(`app/public/`+id)
 	return data
 }
 

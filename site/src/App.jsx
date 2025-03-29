@@ -14,9 +14,11 @@ import AppPage from "./pages/AppPage.jsx";
 import EditPage from "./pages/user/EditPage.jsx";
 
 import "react-toastify/dist/ReactToastify.css";
+import Public from "./pages/Public.jsx";
 
 const routes = [
   { path: "/", element: <Main /> },
+  { path: "/public/:id", element: <Public/>},
   { path: "/add-app", element: <Layout><AddApp/></Layout> },
   { path: "/user", element: <Layout><User/></Layout>},
   { path: "/app/:id", element: <Layout><AppPage/></Layout>},
@@ -44,7 +46,7 @@ function App() {
             {routes.map((route, index) => (
               <Route path={route.path} element={route.element} key={index} />
             ))}
-            <Route path="*" element={<Box sx={{color:'white'}}>Другая страница</Box>} />
+            <Route path="*" element={<Box sx={{color:'white'}}>Страница не найдена</Box>} />
           </Routes>
           <ToastContainer />
         </BrowserRouter>

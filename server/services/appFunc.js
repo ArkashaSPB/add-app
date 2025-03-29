@@ -12,6 +12,18 @@ export const getAppById = async (id, user) => {
 		}
 }
 
+export const getAppByObId = async (id) => {
+	const connection = await connectToDatabase();
+	try {
+		const [app] = await connection.query('SELECT * FROM app WHERE id = ?', [id]);
+		return app.length ? app[0] : {status: false, message: 'Приложение не найдено'};
+	} catch (error) {
+		throw new Error('Ошибка при запросе к базе данных: ' + error.message);
+	} finally {
+		await connection.end();
+	}
+}
+
 export const getAppByUser = async (user) => {
 	const connection = await connectToDatabase();
 	try {
